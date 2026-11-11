@@ -1,0 +1,23 @@
+test_changed_fixture_history_and_success_exit (test_watch.WatchTests.test_changed_fixture_history_and_success_exit) ... ok
+test_doc_keyword_classification (test_watch.WatchTests.test_doc_keyword_classification) ... ok
+test_first_run_baseline_and_second_unchanged (test_watch.WatchTests.test_first_run_baseline_and_second_unchanged) ... ok
+test_healthchecks_failure_suffix_and_safe_errors (test_watch.WatchTests.test_healthchecks_failure_suffix_and_safe_errors) ... ok
+test_hex_digits_are_not_float_suffixes (test_watch.WatchTests.test_hex_digits_are_not_float_suffixes) ... ok
+test_invalid_config_writes_failure_report (test_watch.WatchTests.test_invalid_config_writes_failure_report) ... ok
+test_malformed_health_url_is_safe (test_watch.WatchTests.test_malformed_health_url_is_safe) ... ok
+test_malformed_target_is_reported_safely (test_watch.WatchTests.test_malformed_target_is_reported_safely) ... ok
+test_missing_commits_is_hard_failure (test_watch.WatchTests.test_missing_commits_is_hard_failure) ... ok
+test_missing_target_is_hard_failure_and_does_not_block_others (test_watch.WatchTests.test_missing_target_is_hard_failure_and_does_not_block_others) ... ok
+test_no_environment_notifications_no_network (test_watch.WatchTests.test_no_environment_notifications_no_network) ... ok
+test_numeric_change_addition_removal (test_watch.WatchTests.test_numeric_change_addition_removal) ... ok
+test_numeric_suffixes_comments_and_equivalent_literals (test_watch.WatchTests.test_numeric_suffixes_comments_and_equivalent_literals) ... ok
+test_offline_ignores_notification_environment (test_watch.WatchTests.test_offline_ignores_notification_environment) ... ok
+test_report_write_failure_never_pings_success (test_watch.WatchTests.test_report_write_failure_never_pings_success) ... ok
+test_snapshot_path_traversal_rejected (test_watch.WatchTests.test_snapshot_path_traversal_rejected) ... ok
+test_stale_exact_boundary_and_timezones (test_watch.WatchTests.test_stale_exact_boundary_and_timezones) ... ok
+test_unknown_healthchecks_host_no_failure_ping (test_watch.WatchTests.test_unknown_healthchecks_host_no_failure_ping) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.032s
+
+OK

@@ -1,0 +1,36 @@
+name: Public assumption watch
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: assumption-watch
+  cancel-in-progress: false
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fixture tests
+        run: python -m unittest -v
+      - name: Watch public sources
+        id: watch
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          HEALTHCHECKS_PING_URL: ${{ secrets.HEALTHCHECKS_PING_URL }}
+        run: python watch.py
+      - name: Save snapshots and history
+        if: always() && steps.watch.outcome != 'skipped'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add snapshots history last_run.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Update public watch snapshots and history'
+            git push
+          fi

@@ -1,0 +1,45 @@
+{
+  "targets": [
+    {
+      "id": "algorithm-params",
+      "repo": "xai-org/x-algorithm",
+      "ref": "main",
+      "path": "home-mixer/params/param.rs",
+      "kind": "numeric",
+      "enabled": true
+    },
+    {
+      "id": "algorithm-readme",
+      "repo": "xai-org/x-algorithm",
+      "ref": "main",
+      "path": "README.md",
+      "kind": "text",
+      "enabled": true
+    },
+    {
+      "id": "automation-rules",
+      "repo": "xdevplatform/docs",
+      "enabled": true,
+      "path": "developer-guidelines.mdx",
+      "kind": "text"
+    },
+    {
+      "id": "developer-policy",
+      "repo": "xdevplatform/docs",
+      "enabled": true,
+      "path": "developer-terms/policy.mdx",
+      "kind": "text"
+    },
+    {
+      "id": "pricing",
+      "repo": "xdevplatform/docs",
+      "enabled": true,
+      "path": "x-api/getting-started/pricing.mdx",
+      "kind": "text"
+    }
+  ],
+  "discovery": {
+    "api_url": "https://api.github.com/repos/xdevplatform/docs/git/trees/main?recursive=1",
+    "result": "Confirmed 2026-11-11 by Muse (shell, HTTP 200, 2257 files): developer-guidelines.mdx (Developer Guidelines incl. automation), developer-terms/policy.mdx (X Developer Policy), x-api/getting-started/pricing.mdx (pay-per-usage pricing). Titles/descriptions verified from raw file heads."
+  }
+}
