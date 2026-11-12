@@ -1,36 +1,36 @@
 {
-  "run_at": "2026-11-11T22:03:50.003744+00:00",
+  "run_at": "2026-11-12T05:39:08.957366+00:00",
   "offline": false,
   "targets": [
     {
       "id": "algorithm-params",
-      "status": "baseline",
+      "status": "unchanged",
       "categories": [],
-      "diff_summary": "baseline established"
+      "diff_summary": "no changes"
     },
     {
       "id": "algorithm-readme",
-      "status": "baseline",
+      "status": "unchanged",
       "categories": [],
-      "diff_summary": "baseline established"
+      "diff_summary": "no changes"
     },
     {
       "id": "automation-rules",
-      "status": "baseline",
+      "status": "unchanged",
       "categories": [],
-      "diff_summary": "baseline established"
+      "diff_summary": "no changes"
     },
     {
       "id": "developer-policy",
-      "status": "baseline",
+      "status": "unchanged",
       "categories": [],
-      "diff_summary": "baseline established"
+      "diff_summary": "no changes"
     },
     {
       "id": "pricing",
-      "status": "baseline",
+      "status": "unchanged",
       "categories": [],
-      "diff_summary": "baseline established"
+      "diff_summary": "no changes"
     }
   ],
   "hard_failure": false,
@@ -41,7 +41,7 @@
     ],
     "commit": "f06f45adc05578198e672db6c563a0435e7232dd",
     "last_commit_at": "2026-11-11T03:52:56+00:00",
-    "age_days": 0.757569,
+    "age_days": 1.073761,
     "summary": "upstream is fresh"
   },
   "notification_warnings": []
