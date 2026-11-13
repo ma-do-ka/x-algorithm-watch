@@ -1,12 +1,16 @@
 {
-  "run_at": "2026-11-12T05:39:08.957366+00:00",
+  "run_at": "2026-11-13T04:55:43.914068+00:00",
   "offline": false,
   "targets": [
     {
       "id": "algorithm-params",
-      "status": "unchanged",
-      "categories": [],
-      "diff_summary": "no changes"
+      "status": "changed",
+      "categories": [
+        "other"
+      ],
+      "diff_summary": "text changed; no numeric literal changes",
+      "diff": "--- xai-org/x-algorithm/home-mixer/params/param.rs (old)\n+++ xai-org/x-algorithm/home-mixer/params/param.rs (new)\n@@ -1,4 +1,4 @@\n-// mirrored from config feature-switch defaults; last sync 2026-11-10T16:00:31Z\n+// mirrored from config feature-switch defaults; last sync 2026-11-11T16:00:37Z\n use xai_feature_switches::param;\n \n param!(\n@@ -93,6 +93,7 @@\n     Vec<String>,\n     \"rust_home_mixer_shadow_traffic_phoenix_cluster_rates\",\n     vec![\n+        \"Experiment12Fou:0\".to_string(),\n         \"Experiment18Fou:0.3\".to_string(),\n         \"Experiment19Fou:0.3\".to_string(),\n         \"Experiment22Fou:0.3\".to_string(),\n@@ -101,7 +102,8 @@\n         \"Experiment25Fou:0.3\".to_string(),\n         \"Experiment26Fou:0.3\".to_string(),\n         \"Experiment27Fou:0.3\".to_string(),\n-        \"Experiment28Fou:0.3\".to_string()\n+        \"Experiment28Fou:0.3\".to_string(),\n+        \"Experiment29Fou:0.3\".to_string()\n     ]\n );\n param!(\n@@ -187,12 +189,6 @@\n     EnablePhoenixMOESource,\n     bool,\n     \"rust_home_mixer_enable_phoenix_moe_source\",\n-    false\n-);\n-param!(\n-    EnableShuffledHistoryRetrieval,\n-    bool,\n-    \"rust_home_mixer_enable_shuffled_history_retrieval\",\n     false\n );\n param!(\n",
+      "numeric_changes": []
     },
     {
       "id": "algorithm-readme",
@@ -39,9 +43,9 @@
     "categories": [
       "other"
     ],
-    "commit": "f06f45adc05578198e672db6c563a0435e7232dd",
-    "last_commit_at": "2026-11-11T03:52:56+00:00",
-    "age_days": 1.073761,
+    "commit": "cec61682937a4899360a340acba9e9b9bb8f43e3",
+    "last_commit_at": "2026-11-12T08:51:53+00:00",
+    "age_days": 0.836006,
     "summary": "upstream is fresh"
   },
   "notification_warnings": []
