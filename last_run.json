@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-13T04:55:43.914068+00:00",
+  "run_at": "2026-11-14T04:48:20.418006+00:00",
   "offline": false,
   "targets": [
     {
@@ -9,7 +9,7 @@
         "other"
       ],
       "diff_summary": "text changed; no numeric literal changes",
-      "diff": "--- xai-org/x-algorithm/home-mixer/params/param.rs (old)\n+++ xai-org/x-algorithm/home-mixer/params/param.rs (new)\n@@ -1,4 +1,4 @@\n-// mirrored from config feature-switch defaults; last sync 2026-11-10T16:00:31Z\n+// mirrored from config feature-switch defaults; last sync 2026-11-11T16:00:37Z\n use xai_feature_switches::param;\n \n param!(\n@@ -93,6 +93,7 @@\n     Vec<String>,\n     \"rust_home_mixer_shadow_traffic_phoenix_cluster_rates\",\n     vec![\n+        \"Experiment12Fou:0\".to_string(),\n         \"Experiment18Fou:0.3\".to_string(),\n         \"Experiment19Fou:0.3\".to_string(),\n         \"Experiment22Fou:0.3\".to_string(),\n@@ -101,7 +102,8 @@\n         \"Experiment25Fou:0.3\".to_string(),\n         \"Experiment26Fou:0.3\".to_string(),\n         \"Experiment27Fou:0.3\".to_string(),\n-        \"Experiment28Fou:0.3\".to_string()\n+        \"Experiment28Fou:0.3\".to_string(),\n+        \"Experiment29Fou:0.3\".to_string()\n     ]\n );\n param!(\n@@ -187,12 +189,6 @@\n     EnablePhoenixMOESource,\n     bool,\n     \"rust_home_mixer_enable_phoenix_moe_source\",\n-    false\n-);\n-param!(\n-    EnableShuffledHistoryRetrieval,\n-    bool,\n-    \"rust_home_mixer_enable_shuffled_history_retrieval\",\n     false\n );\n param!(\n",
+      "diff": "--- xai-org/x-algorithm/home-mixer/params/param.rs (old)\n+++ xai-org/x-algorithm/home-mixer/params/param.rs (new)\n@@ -1,4 +1,4 @@\n-// mirrored from config feature-switch defaults; last sync 2026-11-11T16:00:37Z\n+// mirrored from config feature-switch defaults; last sync 2026-11-12T16:00:36Z\n use xai_feature_switches::param;\n \n param!(\n@@ -276,6 +276,12 @@\n     \"rust_home_mixer_phoenix_xds_retrieval_max_retries\",\n     0\n );\n+param!(\n+    PhoenixXdsRetrievalUncompressedClustersList,\n+    Vec<String>,\n+    \"rust_home_mixer_phoenix_xds_retrieval_uncompressed_clusters_list\",\n+    vec![]\n+);\n \n param!(\n     PhoenixRetrievalExcludeSeenPosts,\n@@ -490,7 +496,7 @@\n     ShareViaCopyLinkWeight,\n     f64,\n     \"rust_home_mixer_share_via_copy_link_weight\",\n-    20.0\n+    0.0\n );\n param!(DwellWeight, f64, \"rust_home_mixer_dwell_weight\", 0.05);\n param!(QuoteWeight, f64, \"rust_home_mixer_quote_weight\", 5.0);\n@@ -625,6 +631,18 @@\n     false\n );\n param!(\n+    VMRankerSendDppHistory,\n+    bool,\n+    \"rust_home_mixer_vm_ranker_send_dpp_history\",\n+    false\n+);\n+param!(\n+    VMRankerDppHistoryMaxItems,\n+    usize,\n+    \"rust_home_mixer_vm_ranker_dpp_history_max_items\",\n+    200\n+);\n+param!(\n     HistoryTopicsEnabled,\n     bool,\n     \"rust_home_mixer_history_topics_enabled\",\n@@ -1011,6 +1029,13 @@\n );\n \n param!(\n+    AdsFollowingMinPosts,\n+    u32,\n+    \"rust_home_mixer_ads_following_min_posts\",\n+    5\n+);\n+\n+param!(\n     EnableAdsBrandSafetyVerdictV2,\n     bool,\n     \"rust_home_mixer_ads_bs_v2_exp_enabled\",\n",
       "numeric_changes": []
     },
     {
@@ -43,9 +43,9 @@
     "categories": [
       "other"
     ],
-    "commit": "cec61682937a4899360a340acba9e9b9bb8f43e3",
-    "last_commit_at": "2026-11-12T08:51:53+00:00",
-    "age_days": 0.836006,
+    "commit": "590f3926e5bc33c50d9ece13953623e1e75ee595",
+    "last_commit_at": "2026-11-13T21:42:04+00:00",
+    "age_days": 0.296023,
     "summary": "upstream is fresh"
   },
   "notification_warnings": []
