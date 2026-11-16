@@ -1,16 +1,12 @@
 {
-  "run_at": "2026-11-15T04:40:51.665615+00:00",
+  "run_at": "2026-11-16T04:36:56.357549+00:00",
   "offline": false,
   "targets": [
     {
       "id": "algorithm-params",
-      "status": "changed",
-      "categories": [
-        "other"
-      ],
-      "diff_summary": "text changed; no numeric literal changes",
-      "diff": "--- xai-org/x-algorithm/home-mixer/params/param.rs (old)\n+++ xai-org/x-algorithm/home-mixer/params/param.rs (new)\n@@ -1,4 +1,4 @@\n-// mirrored from config feature-switch defaults; last sync 2026-11-12T16:00:36Z\n+// mirrored from config feature-switch defaults; last sync 2026-11-13T16:00:28Z\n use xai_feature_switches::param;\n \n param!(\n@@ -634,13 +634,13 @@\n     VMRankerSendDppHistory,\n     bool,\n     \"rust_home_mixer_vm_ranker_send_dpp_history\",\n-    false\n+    true\n );\n param!(\n     VMRankerDppHistoryMaxItems,\n     usize,\n     \"rust_home_mixer_vm_ranker_dpp_history_max_items\",\n-    200\n+    50\n );\n param!(\n     HistoryTopicsEnabled,\n",
-      "numeric_changes": []
+      "status": "unchanged",
+      "categories": [],
+      "diff_summary": "no changes"
     },
     {
       "id": "algorithm-readme",
@@ -45,10 +41,8 @@
     ],
     "commit": "30647a85a20cbdd114169beb9973680c4dc4f401",
     "last_commit_at": "2026-11-14T19:11:31+00:00",
-    "age_days": 0.395378,
+    "age_days": 1.392655,
     "summary": "upstream is fresh"
   },
-  "notification_warnings": [
-    "Discord notification failed"
-  ]
+  "notification_warnings": []
 }
