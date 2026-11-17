@@ -1,12 +1,16 @@
 {
-  "run_at": "2026-11-16T04:36:56.357549+00:00",
+  "run_at": "2026-11-17T06:23:23.022515+00:00",
   "offline": false,
   "targets": [
     {
       "id": "algorithm-params",
-      "status": "unchanged",
-      "categories": [],
-      "diff_summary": "no changes"
+      "status": "changed",
+      "categories": [
+        "other"
+      ],
+      "diff_summary": "text changed; no numeric literal changes",
+      "diff": "--- xai-org/x-algorithm/home-mixer/params/param.rs (old)\n+++ xai-org/x-algorithm/home-mixer/params/param.rs (new)\n@@ -1,4 +1,4 @@\n-// mirrored from config feature-switch defaults; last sync 2026-11-13T16:00:28Z\n+// mirrored from config feature-switch defaults; last sync 2026-11-16T16:00:37Z\n use xai_feature_switches::param;\n \n param!(\n@@ -574,6 +574,30 @@\n     \"rust_home_mixer_not_dwelled_weight\",\n     -0.02\n );\n+param!(\n+    NotDwelledPowerExponent,\n+    f64,\n+    \"rust_home_mixer_not_dwelled_power_exponent\",\n+    0.0\n+);\n+param!(\n+    NotDwelledPowerOffset,\n+    f64,\n+    \"rust_home_mixer_not_dwelled_power_offset\",\n+    0.0\n+);\n+param!(\n+    ValueModelMode,\n+    String,\n+    \"rust_home_mixer_value_model_mode\",\n+    \"weighted\"\n+);\n+param!(\n+    MultiplicativeVmEngageBias,\n+    f64,\n+    \"rust_home_mixer_multiplicative_vm_engage_bias\",\n+    0.0\n+);\n \n param!(\n     EnableFollowingRepliedUsersFacepile,\n@@ -634,7 +658,7 @@\n     VMRankerSendDppHistory,\n     bool,\n     \"rust_home_mixer_vm_ranker_send_dpp_history\",\n-    true\n+    false\n );\n param!(\n     VMRankerDppHistoryMaxItems,\n@@ -1072,6 +1096,30 @@\n     \"rust_home_mixer_ads_time_gap_min_organic_gap\",\n     3\n );\n+param!(\n+    AdsUserStateKeepPct,\n+    Vec<u64>,\n+    \"rust_home_mixer_ads_user_state_keep_pct\",\n+    vec![]\n+);\n+param!(\n+    AdsUserStateSpacing,\n+    Vec<u64>,\n+    \"rust_home_mixer_ads_user_state_spacing\",\n+    vec![]\n+);\n+param!(\n+    EnableAdsOnlyTimeline,\n+    bool,\n+    \"rust_home_mixer_enable_ads_only_timeline\",\n+    false\n+);\n+param!(\n+    AdsOnlyTimelineViewerIds,\n+    Vec<u64>,\n+    \"rust_home_mixer_ads_only_timeline_viewer_ids\",\n+    vec![]\n+);\n param!(UseXdsForUas, bool, \"rust_home_mixer_use_xds_for_uas\", true);\n param!(\n     UasSourceDataType,\n",
+      "numeric_changes": []
     },
     {
       "id": "algorithm-readme",
@@ -16,9 +20,12 @@
     },
     {
       "id": "automation-rules",
-      "status": "unchanged",
-      "categories": [],
-      "diff_summary": "no changes"
+      "status": "changed",
+      "categories": [
+        "rules_pricing"
+      ],
+      "diff_summary": "text changed (rules_pricing)",
+      "diff": "--- xdevplatform/docs/developer-guidelines.mdx (old)\n+++ xdevplatform/docs/developer-guidelines.mdx (new)\n@@ -80,7 +80,7 @@\n     | App responds to @mentions asking for help | <Icon icon=\"/icons/xds/icon-checkmark-circle.svg\" color=\"#22c55e\" /> | User-initiated request |\n     | App auto-replies to anyone mentioning a keyword | <Icon icon=\"/icons/xds/icon-close-circle-lg.svg\" color=\"#ef4444\" /> | Unsolicited interaction |\n     | App auto-replies to users who reply to your post | <Icon icon=\"/icons/xds/icon-checkmark-circle.svg\" color=\"#22c55e\" /> | User engaged first—limit 1 reply. [Conditions apply](#gray-areas-explained) |\n-    | AI-powered app generates and posts replies | <Icon icon=\"/icons/xds/icon-warning.svg\" color=\"#f59e0b\" /> | Requires **prior approval** from X |\n+    | AI-powered app generates and posts replies | <Icon icon=\"/icons/xds/icon-checkmark-circle.svg\" color=\"#22c55e\" /> | No written approval needed—must follow all automation rules. [Conditions apply](#gray-areas-explained) |\n     | App replies with \"follow me for more!\" to random users | <Icon icon=\"/icons/xds/icon-close-circle-lg.svg\" color=\"#ef4444\" /> | Spam, unsolicited |\n     | Utility app that unrolls threads when mentioned | <Icon icon=\"/icons/xds/icon-checkmark-circle.svg\" color=\"#22c55e\" /> | User-initiated utility |\n   </Tab>\n@@ -226,12 +226,12 @@\n   </Accordion>\n \n   <Accordion title=\"AI-Generated Content & Replies\" icon=\"microchip-ai\">\n-    - **Requires prior approval from X** before deployment\n+    - **No written approval from X is needed** as long as you follow X's [automation rules](https://help.x.com/en/rules-and-policies/x-automation) and these Developer Guidelines\n     - Must still follow all rules (no unsolicited mentions, properly labeled)\n-    - Contact X via the [Policy Support form](https://help.x.com/forms/platform) before launching\n-    - Even with approval, cannot impersonate humans\n-\n-    <Warning>Deploying AI-generated replies without approval is a violation, even if the content itself is helpful.</Warning>\n+    - Cannot impersonate humans\n+    - X does not make policy exceptions for self-serve customers. If you're interested in becoming an Enterprise customer and want to discuss exceptions for your use case, submit the [Enterprise API Interest form](/forms/enterprise-api-interest)\n+\n+    <Warning>Deploying AI-generated replies that break these rules is a violation, even if the content itself is helpful.</Warning>\n   </Accordion>\n \n   <Accordion title=\"Welcome Messages to New Followers\" icon=\"/icons/xds/icon-envelope.svg\">\n@@ -429,7 +429,7 @@\n     - Disclose operator in bio\n     - Wait for users to initiate interaction\n     - Provide easy opt-out\n-    - Get approval for AI-generated replies\n+    - Keep AI-generated replies within the automation rules\n \n     **For All Apps:**\n     - Use only the official X API\n"
     },
     {
       "id": "developer-policy",
@@ -39,10 +46,12 @@
     "categories": [
       "other"
     ],
-    "commit": "30647a85a20cbdd114169beb9973680c4dc4f401",
-    "last_commit_at": "2026-11-14T19:11:31+00:00",
-    "age_days": 1.392655,
+    "commit": "a284320b66a9dce35e6f5d6b052ee308eeb12326",
+    "last_commit_at": "2026-11-17T03:20:50+00:00",
+    "age_days": 0.126771,
     "summary": "upstream is fresh"
   },
-  "notification_warnings": []
+  "notification_warnings": [
+    "Discord notification failed"
+  ]
 }
