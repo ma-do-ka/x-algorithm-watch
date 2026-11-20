@@ -8,6 +8,7 @@ import json
 import os
 from pathlib import Path
 import re
+import urllib.error
 import urllib.parse
 import urllib.request
 
@@ -23,14 +24,94 @@ NUMBER = r'[+-]?(?:0[xX][0-9a-fA-F_]+|0[bB][01_]+|0[oO][0-7_]+|(?:\d[\d_]*(?:\.[
 CONSTANT = re.compile(r'\bconst\s+([A-Za-z_]\w*)\s*:\s*[^=;]+?=\s*(' + NUMBER + r')\s*;', re.MULTILINE)
 
 
+# Only these text-change categories are substantive enough to notify/log.
+NOTIFY_CATEGORIES = {'rules_pricing', 'visibility'}
+# Known noise: the upstream mirror stamp changes on every sync without any
+# substantive edit, so lines carrying it never count as a change.
+NOISE_LINE = re.compile(r'last sync', re.IGNORECASE)
+
+
+def _literal_decimal(literal):
+    suffix = r'_?[iu](?:8|16|32|64|128|size)$' if re.match(r'^[+-]?0[xXbBoO]', literal) else r'_?(?:f32|f64|[iu](?:8|16|32|64|128|size))$'
+    value = re.sub(suffix, '', literal).replace('_', '')
+    return Decimal(int(value, 0)) if re.match(r'^[+-]?0[xXbBoO]', value) else Decimal(value)
+
+
+def _macro_invocations(text, name):
+    """Yield the argument text of each `name!(...)` call (string literals are skipped)."""
+    pattern = re.compile(r'\b' + re.escape(name) + r'!\s*\(')
+    position = 0
+    while True:
+        match = pattern.search(text, position)
+        if not match:
+            return
+        depth, index, in_string, escaped = 1, match.end(), False, False
+        while index < len(text) and depth:
+            char = text[index]
+            if in_string:
+                if escaped:
+                    escaped = False
+                elif char == '\\':
+                    escaped = True
+                elif char == '"':
+                    in_string = False
+            elif char == '"':
+                in_string = True
+            elif char == '(':
+                depth += 1
+            elif char == ')':
+                depth -= 1
+            index += 1
+        yield text[match.end():index - 1]
+        position = index
+
+
+def _split_args(text):
+    """Split a macro argument list on top-level commas."""
+    parts, depth, in_string, escaped, current = [], 0, False, False, ''
+    for char in text:
+        if in_string:
+            current += char
+            if escaped:
+                escaped = False
+            elif char == '\\':
+                escaped = True
+            elif char == '"':
+                in_string = False
+            continue
+        if char == '"':
+            in_string = True
+        elif char in '([{':
+            depth += 1
+        elif char in ')]}':
+            depth -= 1
+        elif char == ',' and depth == 0:
+            parts.append(current)
+            current = ''
+            continue
+        current += char
+    if current.strip():
+        parts.append(current)
+    return [part.strip() for part in parts]
+
+
 def numeric_constants(text):
-    """Parse Rust const declarations whose value is one numeric literal."""
+    """Parse numeric defaults from Rust const declarations and param!(...) macros.
+
+    The watched param.rs expresses its ranking weights almost entirely as
+    param!(Name, Type, "key", value) invocations, so both forms are read.
+    Comments and known noise lines (the mirror 'last sync' stamp) are removed
+    first, so they can never register as a change.
+    """
+    text = '\n'.join(line for line in text.splitlines() if not NOISE_LINE.search(line))
     text = re.sub(r'/\*.*?\*/|//[^\n]*', '', text, flags=re.DOTALL)
     result = {}
     for name, literal in CONSTANT.findall(text):
-        suffix = r'_?[iu](?:8|16|32|64|128|size)$' if re.match(r'^[+-]?0[xXbBoO]', literal) else r'_?(?:f32|f64|[iu](?:8|16|32|64|128|size))$'
-        value = re.sub(suffix, '', literal).replace('_', '')
-        result[name] = Decimal(int(value, 0)) if re.match(r'^[+-]?0[xXbBoO]', value) else Decimal(value)
+        result[name] = _literal_decimal(literal)
+    for invocation in _macro_invocations(text, 'param'):
+        args = _split_args(invocation)
+        if len(args) >= 4 and re.fullmatch(r'[A-Za-z_]\w*', args[0]) and re.fullmatch(NUMBER, args[-1]):
+            result[args[0]] = _literal_decimal(args[-1])
     return result
 
 
@@ -108,6 +189,9 @@ def notify(summary, success, meaningful, offline=False):
             req = urllib.request.Request(url, data=data, headers={'Content-Type': 'application/json'} if data else {})
             with urllib.request.urlopen(req, timeout=15):
                 pass
+        except urllib.error.HTTPError as error:
+            # A status code is safe to publish and pinpoints a dead endpoint.
+            warnings.append(label + ' notification failed (HTTP ' + str(error.code) + ')')
         except Exception:
             warnings.append(label + ' notification failed')
     return warnings
@@ -117,7 +201,12 @@ def run(config_path, output, fixture=None, now=None):
     now = now or datetime.now(timezone.utc)
     output = Path(output)
     fixture = Path(fixture) if fixture else None
-    report = {'run_at': now.isoformat(), 'offline': fixture is not None, 'targets': [], 'hard_failure': False}
+    try:
+        stale_alerted = bool(json.loads((output / 'last_run.json').read_text(encoding='utf-8')).get('stale_alerted'))
+    except Exception:
+        stale_alerted = False
+    report = {'run_at': now.isoformat(), 'offline': fixture is not None, 'targets': [], 'hard_failure': False,
+              'stale_alerted': stale_alerted}
     meaningful = []
     try:
         config = json.loads(Path(config_path).read_text(encoding='utf-8'))
@@ -146,13 +235,17 @@ def run(config_path, output, fixture=None, now=None):
                         entry['numeric_changes'] = items
                         entry['categories'] = ['weights'] if items else ['other']
                         entry['diff_summary'] = '\n'.join(f"{item['name']}: {item['old']} -> {item['new']}" for item in items) or 'text changed; no numeric literal changes'
+                        # Only real numeric literal changes are substantive; any
+                        # other edit (sync stamp, string lists, flags) stays silent.
+                        if items:
+                            meaningful.append(entry)
                     else:
                         changed_lines = '\n'.join(line[1:] for line in diff.splitlines() if line.startswith(('+', '-')) and not line.startswith(('+++', '---')))
                         entry['categories'] = classify(changed_lines)
                         entry['diff_summary'] = 'text changed (' + ', '.join(entry['categories']) + ')'
-                    # Whitespace-only edits update the snapshot but do not notify/log.
-                    if re.sub(r'\s+', '', old) != re.sub(r'\s+', '', text):
-                        meaningful.append(entry)
+                        # Only rules/pricing and visibility changes are substantive.
+                        if set(entry['categories']) & NOTIFY_CATEGORIES:
+                            meaningful.append(entry)
                 atomic_write(snapshot, text)
             except Exception as error:
                 entry.update(status='error', diff_summary='target failed (' + type(error).__name__ + ')')
@@ -161,7 +254,13 @@ def run(config_path, output, fixture=None, now=None):
             commits = json.loads((fixture / 'commits.json').read_text(encoding='utf-8') if fixture else fetch(COMMITS_URL))
             report['freshness'] = freshness(commits, now)
             if report['freshness']['status'] == 'STALE':
-                meaningful.append({'id': 'freshness', **report['freshness'], 'diff_summary': report['freshness']['summary']})
+                # Notify only when staleness begins; daily repeats while it
+                # persists stay silent. The flag rides along in last_run.json.
+                if not report['stale_alerted']:
+                    meaningful.append({'id': 'freshness', **report['freshness'], 'diff_summary': report['freshness']['summary']})
+                report['stale_alerted'] = True
+            else:
+                report['stale_alerted'] = False
         except Exception as error:
             report['freshness'] = {'status': 'error', 'summary': 'freshness check failed (' + type(error).__name__ + ')'}
             report['hard_failure'] = True

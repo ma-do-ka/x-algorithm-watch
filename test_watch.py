@@ -4,6 +4,7 @@ from datetime import datetime, timedelta, timezone
 import io
 import json
 from pathlib import Path
+import shutil
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -184,6 +185,89 @@ class WatchTests(unittest.TestCase):
         code, report, _ = self.execute(config=path)
         self.assertEqual(code, 1)
         self.assertEqual(report['targets'][0]['status'], 'error')
+
+    def test_param_macro_numeric_defaults(self):
+        old = '''// mirrored from config feature-switch defaults; last sync 2026-11-10T16:00:31Z
+        param!(ReplyWeight, f64, "rust_home_mixer_reply_weight", 5.0);
+        param!(
+            DwellWeight,
+            f64,
+            "rust_home_mixer_dwell_weight",
+            0.05
+        );
+        param!(Enabled, bool, "rust_home_mixer_enabled", false);
+        param!(Label, String, "rust_home_mixer_label", "42");
+        param!(Rates, Vec<String>, "rust_home_mixer_rates", vec!["0.3".to_string()]);
+        '''
+        restamped = old.replace('2026-11-10T16:00:31Z', '2026-11-11T16:00:37Z')
+        self.assertEqual(watch.numeric_diff(old, restamped), [])
+        self.assertEqual(watch.numeric_diff(old, old.replace('false);', 'true);')), [])
+        self.assertEqual(watch.numeric_diff(old, old.replace('"rust_home_mixer_reply_weight", 5.0',
+                                                             '"rust_home_mixer_reply_weight", 6.0')),
+                         [{'name': 'ReplyWeight', 'old': '5.0', 'new': '6.0'}])
+        self.assertEqual(watch.numeric_diff(old, old.replace('0.05\n', '0.5\n')),
+                         [{'name': 'DwellWeight', 'old': '0.05', 'new': '0.5'}])
+
+    def copy_fixture(self, name):
+        fixture = Path(self.temp.name) / name
+        shutil.copytree(ROOT / 'fixtures' / 'baseline', fixture)
+        return fixture
+
+    def execute_dir(self, fixture):
+        with patch('watch.notify', return_value=[]) as notify:
+            with redirect_stdout(io.StringIO()):
+                code = watch.run(ROOT / 'watch_targets.json', self.output, fixture, NOW)
+        report = json.loads((self.output / 'last_run.json').read_text())
+        return code, report, notify.call_args.args[2]
+
+    def test_non_substantive_changes_do_not_notify(self):
+        _, _, meaningful = self.execute_dir(self.copy_fixture('fixture-a'))
+        self.assertFalse(meaningful)
+        edited = self.copy_fixture('fixture-b')
+        params = edited / 'xai-org/x-algorithm/home-mixer/params/param.rs'
+        params.write_text(params.read_text() + 'pub const NOTE: &str = "revised";\n')
+        guidelines = edited / 'xdevplatform/docs/developer-guidelines.mdx'
+        guidelines.write_text(guidelines.read_text() + '\nA minor wording tweak.\n')
+        code, _, meaningful = self.execute_dir(edited)
+        self.assertEqual(code, 0)
+        self.assertFalse(meaningful)
+        self.assertFalse((self.output / 'history').exists())
+
+    def test_param_macro_change_notifies(self):
+        relative = Path('xai-org/x-algorithm/home-mixer/params/param.rs')
+        before = self.copy_fixture('fixture-a')
+        (before / relative).write_text('// mirrored from config feature-switch defaults; last sync 2026-11-10T16:00:31Z\n'
+                                       'param!(ReplyWeight, f64, "rust_home_mixer_reply_weight", 5.0);\n')
+        self.execute_dir(before)
+        after = self.copy_fixture('fixture-b')
+        (after / relative).write_text('// mirrored from config feature-switch defaults; last sync 2026-11-11T16:00:37Z\n'
+                                      'param!(ReplyWeight, f64, "rust_home_mixer_reply_weight", 6.0);\n')
+        code, report, meaningful = self.execute_dir(after)
+        self.assertEqual(code, 0)
+        self.assertTrue(meaningful)
+        self.assertEqual(report['targets'][0]['numeric_changes'],
+                         [{'name': 'ReplyWeight', 'old': '5.0', 'new': '6.0'}])
+        history = (self.output / 'history/2026-11-11.md').read_text()
+        self.assertIn('ReplyWeight: 5.0 -> 6.0', history)
+
+    def test_stale_notifies_only_when_staleness_begins(self):
+        stale = self.copy_fixture('fixture-stale')
+        (stale / 'commits.json').write_text(json.dumps(
+            [{'sha': 'x', 'commit': {'committer': {'date': '2026-10-20T00:00:00Z'}}}]))
+        _, report, meaningful = self.execute_dir(stale)
+        self.assertTrue(meaningful)
+        self.assertTrue(report['stale_alerted'])
+        _, report, meaningful = self.execute_dir(stale)
+        self.assertFalse(meaningful)
+        self.assertTrue(report['stale_alerted'])
+        fresh = self.copy_fixture('fixture-fresh')
+        (fresh / 'commits.json').write_text(json.dumps(
+            [{'sha': 'x', 'commit': {'committer': {'date': '2026-11-10T00:00:00Z'}}}]))
+        _, report, meaningful = self.execute_dir(fresh)
+        self.assertFalse(meaningful)
+        self.assertFalse(report['stale_alerted'])
+        _, _, meaningful = self.execute_dir(stale)
+        self.assertTrue(meaningful)
 
     def test_snapshot_path_traversal_rejected(self):
         with self.assertRaises(ValueError):
