@@ -1,16 +1,12 @@
 {
-  "run_at": "2026-11-19T05:47:20.069095+00:00",
+  "run_at": "2026-11-20T05:36:24.206663+00:00",
   "offline": false,
   "targets": [
     {
       "id": "algorithm-params",
-      "status": "changed",
-      "categories": [
-        "other"
-      ],
-      "diff_summary": "text changed; no numeric literal changes",
-      "diff": "--- xai-org/x-algorithm/home-mixer/params/param.rs (old)\n+++ xai-org/x-algorithm/home-mixer/params/param.rs (new)\n@@ -1,4 +1,4 @@\n-// mirrored from config feature-switch defaults; last sync 2026-11-17T16:00:33Z\n+// mirrored from config feature-switch defaults; last sync 2026-11-18T16:00:39Z\n use xai_feature_switches::param;\n \n param!(\n@@ -661,6 +661,18 @@\n     false\n );\n param!(\n+    VMRankerSendEngagementIneligible,\n+    bool,\n+    \"rust_home_mixer_vm_ranker_send_engagement_ineligible\",\n+    false\n+);\n+param!(\n+    EngagementLabelsMaxCandidates,\n+    usize,\n+    \"rust_home_mixer_engagement_labels_max_candidates\",\n+    200\n+);\n+param!(\n     VMRankerDppHistoryMaxItems,\n     usize,\n     \"rust_home_mixer_vm_ranker_dpp_history_max_items\",\n@@ -1139,6 +1151,12 @@\n     20\n );\n param!(\n+    AdsUserLoadEvenSpread,\n+    bool,\n+    \"rust_home_mixer_ads_user_load_even_spread\",\n+    false\n+);\n+param!(\n     EnableAdsOnlyTimeline,\n     bool,\n     \"rust_home_mixer_enable_ads_only_timeline\",\n@@ -1252,32 +1270,13 @@\n     EnableTeacherScoreSideEffect,\n     bool,\n     \"rust_home_mixer_enable_teacher_score_side_effect\",\n-    false\n-);\n-param!(\n-    TeacherPhoenixCluster,\n-    String,\n-    \"rust_home_mixer_teacher_phoenix_cluster\",\n-    \"\"\n-);\n-param!(\n-    TeacherSampleBps,\n-    u32,\n-    \"rust_home_mixer_teacher_sample_bps\",\n-    0\n-);\n-param!(TeacherTopK, usize, \"rust_home_mixer_teacher_top_k\", 64);\n+    true\n+);\n param!(\n     TeacherActionIndices,\n     Vec<u64>,\n     \"rust_home_mixer_teacher_action_indices\",\n-    vec![]\n-);\n-param!(\n-    TeacherTimeoutMs,\n-    u64,\n-    \"rust_home_mixer_teacher_timeout_ms\",\n-    2000\n+    vec![1, 4, 5, 6, 11, 12, 13, 14, 16, 17, 21, 23, 25, 29, 30, 32, 33, 37, 38, 39, 59]\n );\n param!(\n     TeacherTtlSeconds,\n",
-      "numeric_changes": []
+      "status": "unchanged",
+      "categories": [],
+      "diff_summary": "no changes"
     },
     {
       "id": "algorithm-readme",
@@ -38,6 +34,7 @@
     }
   ],
   "hard_failure": false,
+  "stale_alerted": false,
   "freshness": {
     "status": "fresh",
     "categories": [
@@ -45,10 +42,8 @@
     ],
     "commit": "b55151777cd8901111c7b5985a724f671f05d2c4",
     "last_commit_at": "2026-11-19T03:57:33+00:00",
-    "age_days": 0.076239,
+    "age_days": 1.068648,
     "summary": "upstream is fresh"
   },
-  "notification_warnings": [
-    "Discord notification failed"
-  ]
+  "notification_warnings": []
 }
