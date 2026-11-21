@@ -1,4 +1,4 @@
-// mirrored from config feature-switch defaults; last sync 2026-11-18T16:00:39Z
+// mirrored from config feature-switch defaults; last sync 2026-11-20T16:00:34Z
 use xai_feature_switches::param;
 
 param!(
@@ -18,6 +18,12 @@ param!(
     u32,
     "rust_home_mixer_phoenix_cold_start_max_results",
     200
+);
+param!(
+    PhoenixRetrievalDatasetTopK,
+    String,
+    "rust_home_mixer_phoenix_retrieval_dataset_top_k",
+    ""
 );
 
 param!(
@@ -95,7 +101,7 @@ param!(
     vec![
         "Experiment12Fou:0".to_string(),
         "Experiment18Fou:0.3".to_string(),
-        "Experiment19Fou:0.3".to_string(),
+        "Experiment19Fou:0".to_string(),
         "Experiment22Fou:0.3".to_string(),
         "Experiment23Fou:0.3".to_string(),
         "Experiment24Fou:0.3".to_string(),
@@ -341,6 +347,19 @@ param!(
     bool,
     "rust_home_mixer_enable_page_decode_rerank",
     false
+);
+param!(
+    EnableRankerVmRank,
+    bool,
+    "rust_home_mixer_enable_ranker_vm_rank",
+    false
+);
+param!(PageDecodeEta, f64, "rust_home_mixer_page_decode_eta", 0.0);
+param!(
+    PageDecodePriorTau,
+    f64,
+    "rust_home_mixer_page_decode_prior_tau",
+    0.2
 );
 param!(
     PageDecodePoolN,
@@ -796,6 +815,12 @@ param!(
     false
 );
 param!(
+    EnableUnderTheHoodSetting,
+    bool,
+    "rust_home_mixer_enable_under_the_hood_setting",
+    false
+);
+param!(
     MaxPostsToCache,
     usize,
     "rust_home_mixer_max_posts_to_cache",
@@ -1068,7 +1093,7 @@ param!(
     AdsFollowingMinPosts,
     u32,
     "rust_home_mixer_ads_following_min_posts",
-    5
+    2
 );
 
 param!(
@@ -1502,6 +1527,18 @@ param!(
     EnableVideoCarouselTakeFromFeed,
     bool,
     "rust_home_mixer_enable_video_carousel_take_from_feed",
+    false
+);
+param!(
+    EnableVideoCarouselMoeSource,
+    bool,
+    "rust_home_mixer_enable_video_carousel_moe_source",
+    false
+);
+param!(
+    EnableVideoCarouselMoeOnly,
+    bool,
+    "rust_home_mixer_enable_video_carousel_moe_only",
     false
 );
 param!(
