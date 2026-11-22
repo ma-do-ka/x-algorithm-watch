@@ -1,27 +1,12 @@
 {
-  "run_at": "2026-11-21T05:29:45.285458+00:00",
+  "run_at": "2026-11-22T04:54:59.349758+00:00",
   "offline": false,
   "targets": [
     {
       "id": "algorithm-params",
-      "status": "changed",
-      "categories": [
-        "weights"
-      ],
-      "diff_summary": "PageDecodeEta: None -> 0.0\nPageDecodePriorTau: None -> 0.2",
-      "diff": "--- xai-org/x-algorithm/home-mixer/params/param.rs (old)\n+++ xai-org/x-algorithm/home-mixer/params/param.rs (new)\n@@ -1,4 +1,4 @@\n-// mirrored from config feature-switch defaults; last sync 2026-11-18T16:00:39Z\n+// mirrored from config feature-switch defaults; last sync 2026-11-20T16:00:34Z\n use xai_feature_switches::param;\n \n param!(\n@@ -18,6 +18,12 @@\n     u32,\n     \"rust_home_mixer_phoenix_cold_start_max_results\",\n     200\n+);\n+param!(\n+    PhoenixRetrievalDatasetTopK,\n+    String,\n+    \"rust_home_mixer_phoenix_retrieval_dataset_top_k\",\n+    \"\"\n );\n \n param!(\n@@ -95,7 +101,7 @@\n     vec![\n         \"Experiment12Fou:0\".to_string(),\n         \"Experiment18Fou:0.3\".to_string(),\n-        \"Experiment19Fou:0.3\".to_string(),\n+        \"Experiment19Fou:0\".to_string(),\n         \"Experiment22Fou:0.3\".to_string(),\n         \"Experiment23Fou:0.3\".to_string(),\n         \"Experiment24Fou:0.3\".to_string(),\n@@ -341,6 +347,19 @@\n     bool,\n     \"rust_home_mixer_enable_page_decode_rerank\",\n     false\n+);\n+param!(\n+    EnableRankerVmRank,\n+    bool,\n+    \"rust_home_mixer_enable_ranker_vm_rank\",\n+    false\n+);\n+param!(PageDecodeEta, f64, \"rust_home_mixer_page_decode_eta\", 0.0);\n+param!(\n+    PageDecodePriorTau,\n+    f64,\n+    \"rust_home_mixer_page_decode_prior_tau\",\n+    0.2\n );\n param!(\n     PageDecodePoolN,\n@@ -796,6 +815,12 @@\n     false\n );\n param!(\n+    EnableUnderTheHoodSetting,\n+    bool,\n+    \"rust_home_mixer_enable_under_the_hood_setting\",\n+    false\n+);\n+param!(\n     MaxPostsToCache,\n     usize,\n     \"rust_home_mixer_max_posts_to_cache\",\n@@ -1068,7 +1093,7 @@\n     AdsFollowingMinPosts,\n     u32,\n     \"rust_home_mixer_ads_following_min_posts\",\n-    5\n+    2\n );\n \n param!(\n@@ -1505,6 +1530,18 @@\n     false\n );\n param!(\n+    EnableVideoCarouselMoeSource,\n+    bool,\n+    \"rust_home_mixer_enable_video_carousel_moe_source\",\n+    false\n+);\n+param!(\n+    EnableVideoCarouselMoeOnly,\n+    bool,\n+    \"rust_home_mixer_enable_video_carousel_moe_only\",\n+    false\n+);\n+param!(\n     EnableVideoCarouselCandidatesLogging,\n     bool,\n     \"rust_home_mixer_enable_video_carousel_candidates_logging\",\n",
-      "numeric_changes": [
-        {
-          "name": "PageDecodeEta",
-          "old": null,
-          "new": "0.0"
-        },
-        {
-          "name": "PageDecodePriorTau",
-          "old": null,
-          "new": "0.2"
-        }
-      ]
+      "status": "unchanged",
+      "categories": [],
+      "diff_summary": "no changes"
     },
     {
       "id": "algorithm-readme",
@@ -57,10 +42,8 @@
     ],
     "commit": "269340ce2eb8ca785bafa4f2c17a2e8b752bccd3",
     "last_commit_at": "2026-11-21T03:11:26+00:00",
-    "age_days": 0.096057,
+    "age_days": 1.071914,
     "summary": "upstream is fresh"
   },
-  "notification_warnings": [
-    "Discord notification failed (HTTP 403)"
-  ]
+  "notification_warnings": []
 }
