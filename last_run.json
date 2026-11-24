@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-11-23T05:36:18.348075+00:00",
+  "run_at": "2026-11-24T08:14:32.822165+00:00",
   "offline": false,
   "targets": [
     {
@@ -42,7 +42,7 @@
     ],
     "commit": "269340ce2eb8ca785bafa4f2c17a2e8b752bccd3",
     "last_commit_at": "2026-11-21T03:11:26+00:00",
-    "age_days": 2.100606,
+    "age_days": 3.210496,
     "summary": "upstream is fresh"
   },
   "notification_warnings": []
