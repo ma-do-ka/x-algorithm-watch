@@ -1,12 +1,16 @@
 {
-  "run_at": "2026-11-24T08:14:32.822165+00:00",
+  "run_at": "2026-11-25T06:51:48.257940+00:00",
   "offline": false,
   "targets": [
     {
       "id": "algorithm-params",
-      "status": "unchanged",
-      "categories": [],
-      "diff_summary": "no changes"
+      "status": "changed",
+      "categories": [
+        "other"
+      ],
+      "diff_summary": "text changed; no numeric literal changes",
+      "diff": "--- xai-org/x-algorithm/home-mixer/params/param.rs (old)\n+++ xai-org/x-algorithm/home-mixer/params/param.rs (new)\n@@ -1,4 +1,4 @@\n-// mirrored from config feature-switch defaults; last sync 2026-11-20T16:00:34Z\n+// mirrored from config feature-switch defaults; last sync 2026-11-24T16:00:39Z\n use xai_feature_switches::param;\n \n param!(\n@@ -821,6 +821,12 @@\n     false\n );\n param!(\n+    EnableUnderTheHoodLimit,\n+    bool,\n+    \"rust_home_mixer_enable_under_the_hood_limit\",\n+    false\n+);\n+param!(\n     MaxPostsToCache,\n     usize,\n     \"rust_home_mixer_max_posts_to_cache\",\n@@ -1307,7 +1313,7 @@\n     TeacherTtlSeconds,\n     u64,\n     \"rust_home_mixer_teacher_ttl_seconds\",\n-    3000\n+    10800\n );\n \n param!(\n@@ -1425,6 +1431,18 @@\n     \"rust_home_mixer_jetfuel_frame_grokbot_suggested_tasks_fatigue_hours\",\n     6\n );\n+param!(\n+    EnableJetfuelFrameGrokbotBlackFriday,\n+    bool,\n+    \"rust_home_mixer_jetfuel_frame_grokbot_black_friday_enabled\",\n+    false\n+);\n+param!(\n+    JetfuelFrameGrokbotBlackFridayFatigueHours,\n+    u32,\n+    \"rust_home_mixer_jetfuel_frame_grokbot_black_friday_fatigue_hours\",\n+    6\n+);\n \n param!(\n     EnableFeedSurvey,\n@@ -1539,6 +1557,30 @@\n     EnableVideoCarouselMoeOnly,\n     bool,\n     \"rust_home_mixer_enable_video_carousel_moe_only\",\n+    false\n+);\n+param!(\n+    EnableVideoCarouselPopularVideoSource,\n+    bool,\n+    \"rust_home_mixer_enable_video_carousel_popular_video_source\",\n+    false\n+);\n+param!(\n+    VideoCarouselPopularVideoClusterId,\n+    String,\n+    \"rust_home_mixer_video_carousel_popular_video_cluster_id\",\n+    \"Experiment26Fou\"\n+);\n+param!(\n+    VideoCarouselPopularVideoMaxResults,\n+    u32,\n+    \"rust_home_mixer_video_carousel_popular_video_max_results\",\n+    100\n+);\n+param!(\n+    EnableVideoCarouselPopularOnly,\n+    bool,\n+    \"rust_home_mixer_enable_video_carousel_popular_only\",\n     false\n );\n param!(\n",
+      "numeric_changes": []
     },
     {
       "id": "algorithm-readme",
@@ -40,9 +44,9 @@
     "categories": [
       "other"
     ],
-    "commit": "269340ce2eb8ca785bafa4f2c17a2e8b752bccd3",
-    "last_commit_at": "2026-11-21T03:11:26+00:00",
-    "age_days": 3.210496,
+    "commit": "52d45989090e63992ba04e4f6cfccd73bf8cc05c",
+    "last_commit_at": "2026-11-25T06:24:59+00:00",
+    "age_days": 0.018626,
     "summary": "upstream is fresh"
   },
   "notification_warnings": []

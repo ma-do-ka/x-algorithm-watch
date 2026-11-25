@@ -1,4 +1,4 @@
-// mirrored from config feature-switch defaults; last sync 2026-11-20T16:00:34Z
+// mirrored from config feature-switch defaults; last sync 2026-11-24T16:00:39Z
 use xai_feature_switches::param;
 
 param!(
@@ -821,6 +821,12 @@ param!(
     false
 );
 param!(
+    EnableUnderTheHoodLimit,
+    bool,
+    "rust_home_mixer_enable_under_the_hood_limit",
+    false
+);
+param!(
     MaxPostsToCache,
     usize,
     "rust_home_mixer_max_posts_to_cache",
@@ -1307,7 +1313,7 @@ param!(
     TeacherTtlSeconds,
     u64,
     "rust_home_mixer_teacher_ttl_seconds",
-    3000
+    10800
 );
 
 param!(
@@ -1425,6 +1431,18 @@ param!(
     "rust_home_mixer_jetfuel_frame_grokbot_suggested_tasks_fatigue_hours",
     6
 );
+param!(
+    EnableJetfuelFrameGrokbotBlackFriday,
+    bool,
+    "rust_home_mixer_jetfuel_frame_grokbot_black_friday_enabled",
+    false
+);
+param!(
+    JetfuelFrameGrokbotBlackFridayFatigueHours,
+    u32,
+    "rust_home_mixer_jetfuel_frame_grokbot_black_friday_fatigue_hours",
+    6
+);
 
 param!(
     EnableFeedSurvey,
@@ -1539,6 +1557,30 @@ param!(
     EnableVideoCarouselMoeOnly,
     bool,
     "rust_home_mixer_enable_video_carousel_moe_only",
+    false
+);
+param!(
+    EnableVideoCarouselPopularVideoSource,
+    bool,
+    "rust_home_mixer_enable_video_carousel_popular_video_source",
+    false
+);
+param!(
+    VideoCarouselPopularVideoClusterId,
+    String,
+    "rust_home_mixer_video_carousel_popular_video_cluster_id",
+    "Experiment26Fou"
+);
+param!(
+    VideoCarouselPopularVideoMaxResults,
+    u32,
+    "rust_home_mixer_video_carousel_popular_video_max_results",
+    100
+);
+param!(
+    EnableVideoCarouselPopularOnly,
+    bool,
+    "rust_home_mixer_enable_video_carousel_popular_only",
     false
 );
 param!(
